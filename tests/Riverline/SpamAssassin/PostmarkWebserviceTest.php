@@ -16,22 +16,24 @@ class PostmarkWebserviceTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->postmark = new PostmarkWebservice(true);
+        $this->postmark = new PostmarkWebservice(RawEmail::getGTUBE(), true);
     }
 
     public function testError()
     {
         $this->setExpectedException('RuntimeException', 'SpamAssassin error occured');
 
-        $this->postmark->getScore('');
+        $postmark = new PostmarkWebservice('', true);
+        $postmark->getScore();
     }
 
     public function testSuccess()
     {
-        $score = $this->postmark->getScore(RawEmail::getGTUBE());
+        $postmark = new PostmarkWebservice(RawEmail::getGTUBE(), true);
+        $score = $postmark->getScore();
 
         $this->assertEquals(1000, $score);
 
-        $this->assertContains('Generic Test for Unsolicited Bulk Email', $this->postmark->getReport());
+        $this->assertContains('Generic Test for Unsolicited Bulk Email', $postmark->getReport());
     }
-} 
+}
