@@ -70,6 +70,33 @@ class PostmarkWebservice implements SpamAssassinInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getReportAsArray($skipZeros = true)
+    {
+        $this->requestReport();
+        $result = array();
+
+        if (null !== $this->report) {
+            preg_match_all("/(\-?\d\.\d)\s(\w*)\s*(.*)/", $this->report, $matches);
+            if (!empty($matches)) {
+                foreach ($matches[0] as $key => $value) {
+                    $row = array(
+                        'score' => floatval($matches[1][$key]),
+                        'name' => $matches[2][$key],
+                        'info' => $matches[3][$key]
+                    );
+
+                    if (!$skipZeros || $row['score'] != 0) {
+                        $result[] = $row;
+                    }
+                }
+            }
+        }
+
+        return $result;
+    }
+
     /**
      * Make request to webservice
      */

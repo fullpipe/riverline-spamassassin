@@ -20,3 +20,11 @@ interface SpamAssassinInterface
      * @return mixed
      */
     public function getReport();
+
+    /**
+     * Get report as associated array
+     * @param boolean Skip zero scored messages
+     * @return array
+     */
+    public function getReportAsArray($skipZeros = true);
+}
