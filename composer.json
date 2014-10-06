@@ -1,17 +1,13 @@
 {
-    "name":"riverline/spamassassin",
+    "name":"fullpipe/spamassassin",
     "description":"Library to request SpamAssassin report ",
     "keywords":["spamassassin"],
     "type":"library",
     "license":"MIT",
     "authors":[
         {
-            "name":"Romain Cambien",
-            "email":"romain@riverline.fr"
-        },
-        {
-            "name":"Riverline",
-            "homepage":"http://www.riverline.fr"
+            "name":"Eugene Bravov",
+            "email":"eugene@punchmedia.ru"
         }
     ],
     "require":{
