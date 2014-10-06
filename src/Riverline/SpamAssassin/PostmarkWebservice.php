@@ -29,30 +29,61 @@ class PostmarkWebservice implements SpamAssassinInterface
     protected $report;
 
     /**
+     * @var string
+     */
+    protected $score;
+
+    /**
+     * @var string
+     */
+    protected $email;
+
+    /**
+     * @param string $rawEmail Email as string with headers
      * @param bool $longReport Request a long report
      */
-    public function __construct($longReport = false)
+    public function __construct($rawEmail, $longReport = false)
     {
         $this->client     = new Client();
         $this->longReport = $longReport;
+        $this->email      = $rawEmail;
     }
 
     /**
-     * Get the SpamAssassin score
-     * @param string $rawEmail
-     * @throws \RuntimeException
-     * @return float
+     * {@inheritdoc}
      */
-    public function getScore($rawEmail)
+    public function getScore()
     {
-        // Reset report
-        $this->report = null;
+        $this->requestReport();
+
+        return $this->score;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getReport()
+    {
+        $this->requestReport();
+
+        return $this->report;
+    }
+
+    /**
+    /**
+     * Make request to webservice
+     */
+    public function requestReport()
+    {
+        if (null !== $this->score) {
+            return;
+        }
 
         $request = $this->client->post(
             self::WEBSERVICE_URL,
             array('Content-Type' => 'application/json'),
             json_encode(array(
-                'email'   => $rawEmail,
+                'email'   => $this->email,
                 'options' => ($this->longReport?'long':'short')
             ))
         );
@@ -64,17 +95,8 @@ class PostmarkWebservice implements SpamAssassinInterface
         } elseif (!isset($response['score'])) {
             throw new \RuntimeException('Missing score');
         } else {
-            $this->report = $response['report'];
-            return $response['score'];
+            $this->report = isset($response['report']) ? $response['report'] : null ;
+            $this->score = $response['score'];
         }
-    }
-
-    /**
-     * Get the SpamAssassin full report
-     * @return mixed
-     */
-    public function getReport()
-    {
-        return $this->report;
     }
 }

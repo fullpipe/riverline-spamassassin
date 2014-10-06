@@ -11,14 +11,12 @@ interface SpamAssassinInterface
 {
     /**
      * Get the SpamAssassin score
-     * @param string $rawEmail
      * @return float
      */
-    public function getScore($rawEmail);
+    public function getScore();
 
     /**
      * Get the SpamAssassin full report
      * @return mixed
      */
     public function getReport();
-} 
