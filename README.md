@@ -1,8 +1,5 @@
 # README
 
-[![Build Status](https://travis-ci.org/rcambien/riverline-spamassassin.png?branch=master)](https://travis-ci.org/rcambien/riverline-spamassassin)
-[![SensioLabsInsight](https://insight.sensiolabs.com/projects/82d93761-63ed-487a-8123-a617205bd5f2/mini.png)](https://insight.sensiolabs.com/projects/82d93761-63ed-487a-8123-a617205bd5f2)
-
 ## What is Riverline\SpamAssassin
 
 ``Riverline\SpamAssassin`` is a simple lib to get SpamAssassin score and report for an Email.
@@ -14,7 +11,16 @@
 
 ## Installation
 
-``Riverline\SpamAssassin`` is compatible with [composer](https://packagist.org/packages/riverline/spamassassin) and any prs-0 autoloader
+Add to your `composer.json`:
+```json
+{
+   "require": {
+        ...
+        "fullpipe/spamassassin": "dev-master"
+        ...
+    }
+}
+```
 
 ## Usage
 
@@ -28,9 +34,8 @@ http://spamcheck.postmarkapp.com/doc
 
 use Riverline\SpamAssassin\PostmarkWebservice
 
-$spamAssassin = new PostmarkWebservice();
-echo $spamAssassin->getScore($rawEmail);
-
-// Optionally get the full report
+$spamAssassin = new PostmarkWebservice($rawEmail, true);
+echo $spamAssassin->getScore();
 echo $spamAssassin->getReport();
+var_dump($spamAssassin->getReportAsArray());
 ```
